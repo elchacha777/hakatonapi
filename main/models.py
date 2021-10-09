@@ -24,4 +24,4 @@ class LostItem(models.Model):
     phone = models.CharField(max_length=20, blank=True)
     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
 
-
+#
