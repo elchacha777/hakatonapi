@@ -40,10 +40,10 @@ class LostItemViewSet(PermissionMixin, ModelViewSet):
         return context
 
 
-    # @action(detail=False, methods=['get'])
-    # def search(self, request, pk=None):
-    #     q = request.query_params.get('q')
-    #     queryset = self.get_queryset()
-    #     queryset = queryset.filter(Q(name__icontains=q))
-    #     serializer = LostItemSerializer(queryset, many=True, context={'request': request})
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['get'])
+    def search(self, request, pk=None):
+        q = request.query_params.get('q')
+        queryset = self.get_queryset()
+        queryset = queryset.filter(Q(name__icontains=q))
+        serializer = LostItemSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
