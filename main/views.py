@@ -47,23 +47,3 @@ class LostItemViewSet(PermissionMixin, ModelViewSet):
     #     queryset = queryset.filter(Q(name__icontains=q))
     #     serializer = LostItemSerializer(queryset, many=True, context={'request': request})
     #     return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class FoundItemViewSet(PermissionMixin, ModelViewSet):
-    queryset = FoundItem.objects.all()
-    serializer_class = FoundItemSerializer
-
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['action'] = self.action
-        return context
-
-
-    # @action(detail=False, methods=['get'])
-    # def search(self, request, pk=None):
-    #     q = request.query_params.get('q')
-    #     queryset = self.get_queryset()
-    #     queryset = queryset.filter(Q(name__icontains=q))
-    #     serializer = LostItemSerializer(queryset, many=True, context={'request': request})
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
