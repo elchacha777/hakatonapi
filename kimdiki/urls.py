@@ -39,6 +39,7 @@ router.register('item', LostItemViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include(router.urls)),
     path('api/v1/docs/', schema_view.with_ui()),
     path('api/v1/accounts/', include('account.urls')),
 ]
