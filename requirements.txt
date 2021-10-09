@@ -8,3 +8,4 @@ drf-yasg
 django-phonenumber-field==5.0.0
 djangorestframework_simplejwt
 twilio
+django-cors-headers

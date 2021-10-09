@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
+from corsheaders.defaults import default_headers
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -125,6 +126,14 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+CORS_ALLOW_HEADERS = default_headers + (
+    'Cache-Control', 'If-Modified-Since',
+)
+
+CSRF_TRUSTED_ORIGINS = (
+    '*',
+)
 
 
 # Static files (CSS, JavaScript, Images)
