@@ -25,4 +25,3 @@ class LostItem(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
 
 
-
