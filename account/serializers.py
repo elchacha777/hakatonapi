@@ -44,10 +44,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # The default result (access/refresh tokens)
-        data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
-        # Custom data you want to include
-        data.update({'username': self.user.username})
-        data.update({'phone_number': self.user.phonen_number})
-        # and everything else you want to send in the response
+        data = super().validate(attrs)
+        refresh = self.get_token(self.user)
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+
+        # Add extra responses here
+        data['username'] = self.user.username
+        data['phone_number'] = str(self.user.phone_number)
         return data
