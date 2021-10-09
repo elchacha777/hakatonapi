@@ -17,8 +17,12 @@ class LostItem(models.Model):
     description = models.TextField(max_length=250)
     date_lost = models.DateField()
     image = models.ImageField()
-    status = models.BooleanField()
+    found = 'found'
+    lost = 'lost'
+    choices = [(lost, 'lost'), (found, 'found')]
+    status = models.CharField(max_length=10, choices=choices)
     phone = models.CharField(max_length=20, blank=True)
     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+
 
 
