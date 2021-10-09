@@ -3,6 +3,7 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
 from .tasks import send_activation_sms
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 MyUser = get_user_model()
 
@@ -38,3 +39,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = MyUser.objects._create_user(**validated_data)
         send_activation_sms(str(user.phone_number), user.activation_code)
         return user
+
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        # The default result (access/refresh tokens)
+        data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
+        # Custom data you want to include
+        data.update({'username': self.user.username})
+        data.update({'phone_number': self.user.phonen_number})
+        # and everything else you want to send in the response
+        return data

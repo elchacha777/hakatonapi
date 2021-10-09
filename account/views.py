@@ -4,8 +4,10 @@ from rest_framework.generics import get_object_or_404
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from account.serializers import RegisterSerializer
+from .serializers import CustomTokenObtainPairSerializer
 from .tasks import send_activation_sms
 
 MyUser = get_user_model()
@@ -31,3 +33,8 @@ class ActivationView(APIView):
         user.is_active = True
         user.save()
         return Response('Successfully activated', status=200)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    # Replace the serializer with your custom
+    serializer_class = CustomTokenObtainPairSerializer
