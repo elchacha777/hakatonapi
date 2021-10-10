@@ -22,7 +22,7 @@ class Item(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='item')
     title = models.CharField(max_length=100, )
     description = models.TextField(max_length=250)
-    date_lost = models.DateField(auto_now_add=True)
+    date_lost = models.DateField()
     found = 'found'
     lost = 'lost'
     choices = [(lost, 'lost'), (found, 'found')]
