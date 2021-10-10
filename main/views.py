@@ -1,3 +1,5 @@
+from rest_framework.filters import SearchFilter
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 import django_filters.rest_framework as filters
@@ -29,10 +31,21 @@ class CategoryListView(generics.ListAPIView):
         return queryset
 
 
+# class CategoryDetailView(generics.RetrieveAPIView):
+#     queryset = Category.objects.all()
+#     lookup_url_kwa
+#
+#     def get_queryset(self):
+#         q = super().get_queryset()
+#         q = Item.objects.all()
+#         return q
+
+
 class LostItemViewSet(PermissionMixin, ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    search_fields = ('title', )
     filterset_class = ItemsFilter
 
     def get_serializer_context(self):
@@ -40,14 +53,14 @@ class LostItemViewSet(PermissionMixin, ModelViewSet):
         context['action'] = self.action
         return context
 
-    @action(detail=False, methods=['GET'])
-    def search(self, request, pk=None):
-        q = request.query_params.get('q')
-        queryset = self.get_queryset()
-        queryset = queryset.filter(Q(title__icontains=q) |
-                                   Q(description__icontains=q))
-        serializer = ItemSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # @action(detail=False, methods=['GET'])
+    # def search(self, request, pk=None):
+    #     q = request.query_params.get('q')
+    #     queryset = self.get_queryset()
+    #     queryset = queryset.filter(Q(title__icontains=q) |
+    #                                Q(description__icontains=q))
+    #     serializer = ItemSerializer(queryset, many=True, context={'request': request})
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     # def perform_create(self, serializer):
     #     serializer.save(user=self.request.user.username)
