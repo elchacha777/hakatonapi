@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'account',
     'twilio',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
