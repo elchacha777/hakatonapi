@@ -7,10 +7,11 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from account.serializers import RegisterSerializer
-from .serializers import CustomTokenObtainPairSerializer
+from .models import MyUser
+from .serializers import TokenObtainPairSerializer
 from .tasks import send_activation_sms
 
-MyUser = get_user_model()
+# MyUser = get_user_model()
 
 class RegistrationView(APIView):
     def post(self, request):
@@ -37,4 +38,4 @@ class ActivationView(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     # Replace the serializer with your custom
-    serializer_class = CustomTokenObtainPairSerializer
+    serializer_class = TokenObtainPairSerializer

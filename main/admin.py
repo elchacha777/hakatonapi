@@ -7,11 +7,11 @@ admin.site.register(Category)
 
 
 class ItemImageInLine(admin.TabularInline):
-    model = ItemImage
+    model = Image
     extra = 1
 
 
-@admin.register(LostItem)
+@admin.register(Item)
 class AdminItemDisplay(admin.ModelAdmin):
     fields = ('user', 'title', 'description', 'date_lost', 'category', 'phone')
     search_fields = ('title', )

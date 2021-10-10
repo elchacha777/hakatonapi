@@ -1,6 +1,6 @@
 import django_filters
 from django_filters.rest_framework import FilterSet
-from main.models import LostItem
+from main.models import Item
 
 
 class ItemsFilter(FilterSet):
@@ -10,5 +10,5 @@ class ItemsFilter(FilterSet):
     date_to = django_filters.DateTimeFilter(field_name='date_lost', lookup_expr='lte')
 
     class Meta:
-        model = LostItem
+        model = Item
         fields = ('category', 'title', 'description', 'date_from', 'date_to')

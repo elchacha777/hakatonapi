@@ -34,7 +34,7 @@ schema_view = get_schema_view(
 
 
 router = DefaultRouter()
-router.register('category', CategoryViewSet)
+# router.register('category', Category)
 router.register('item', LostItemViewSet)
 
 urlpatterns = [
@@ -42,6 +42,9 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/v1/docs/', schema_view.with_ui()),
     path('api/v1/accounts/', include('account.urls')),
+    # path('posts/create/', ItemCreateView.as_view()),
+    path('api/v1/categories/', CategoryListView.as_view()),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root= settings.MEDIA_ROOT)

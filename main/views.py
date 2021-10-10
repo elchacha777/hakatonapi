@@ -5,7 +5,7 @@ from main.filters import ItemsFilter
 from main.permissions import IsAuthorPermission
 from main.serializers import *
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, viewsets
 from django.db.models import Q
 
 
@@ -17,8 +17,7 @@ class PermissionMixin:
             permissions = []
         return [permission() for permission in permissions]
 
-
-class CategoryViewSet(PermissionMixin, ModelViewSet):
+class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -31,8 +30,8 @@ class CategoryViewSet(PermissionMixin, ModelViewSet):
 
 
 class LostItemViewSet(PermissionMixin, ModelViewSet):
-    queryset = LostItem.objects.all()
-    serializer_class = LostItemSerializer
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ItemsFilter
 
@@ -47,11 +46,26 @@ class LostItemViewSet(PermissionMixin, ModelViewSet):
         queryset = self.get_queryset()
         queryset = queryset.filter(Q(title__icontains=q) |
                                    Q(description__icontains=q))
-        serializer = LostItemSerializer(queryset, many=True)
+        serializer = ItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user.username)
+
+# class PostCreateView(generics.CreateAPIView):
+#         """
+#         Endpoint for create all posts: only authenticated accounts
+#         """
+#     serializer_class = LostItemSerializer
+#         # permission_classes = (permissions.IsAuthenticated,)
+#
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user)
+
+class ProblemImagesViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+
 
 
 

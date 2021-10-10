@@ -8,45 +8,33 @@ from phonenumber_field.modelfields import PhoneNumberField
 class MyUserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, username, password, **extra_fields):
+    def _create_user(self, username, password, **kwargs):
         if not username:
-            raise ValueError('Username is required')
-        # email = self.normalize_username(username)
-        user = self.model(username=username, **extra_fields)
-        user.set_password(password)
+            raise ValueError("The given email must be set")
+        # email = self.normalize_email(email=email)
+        user = self.model(username=username, **kwargs)
         user.create_activation_code()
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create(self, username, password, **extra_fields):
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(username, password, **extra_fields)
-    # def create_user(self, phone_number, password, **extra_fields):
-    #     if not phone_number:
-    #         raise ValueError('Phone number must be given')
-    #     user = self.model(phone_number=phone_number, **extra_fields)
-    #     user.set_password(password)
-    #     user.create_activation_code()
-    #     user.save(using=self._db)
-    #     return user
+    def create_user(self, username, password=None, **kwargs):
+        kwargs.setdefault('is_staff', False)
+        kwargs.setdefault('is_superuser', False)
+        return self._create_user(username, password, **kwargs)
 
-    def create_superuser(self, username, password, **extra_fields):
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('is_staff', True)
-        if extra_fields.get('is_superuser') is False:
-            raise ValueError('Super users must have is_superuser=True')
-        return self._create_user(username, password, **extra_fields)
-        # if not username:
-        #     raise ValueError('Username must be given')
-        # user = self.model(username=username, **extra_fields)
-        # user.set_password(password)
-        # print(password)
-        # user.is_superuser = True
-        # user.is_active = True
-        # user.is_staff = True
-        # user.save(using=self._db)
-        # return user
+    def create_superuser(self, username, password, **kwargs):
+        kwargs.setdefault('is_staff', True)
+        kwargs.setdefault('is_superuser', True)
+        kwargs.setdefault('is_active', True)
+        if kwargs.get('is_staff') is not True:
+            raise ValueError('Superuser must have status is_staff=True')
+        if kwargs.get('is_superuser') is not True:
+            raise ValueError('Superuser must have status is_superuser=True')
+        return self._create_user(username, password, **kwargs)
+
+
+
 
 
 class MyUser(AbstractUser):
@@ -54,19 +42,15 @@ class MyUser(AbstractUser):
     username = models.CharField(max_length=155, unique=True)
     is_active = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=6, blank=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
+    # is_staff = models.BooleanField(default=False)
+    # is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['phone_number']
+    REQUIRED_FIELDS = []
 
     objects = MyUserManager()
 
-    def has_perm(self, perm, obj=None):
-        return self.is_superuser
 
-    def has_module_perms(self, app_label):
-        return self.is_staff
 
     def __str__(self):
         return f'{self.username} {self.phone_number}'

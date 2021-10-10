@@ -10,3 +10,4 @@ djangorestframework_simplejwt
 twilio
 django-cors-headers
 django-filter
+PyJWT==2.1.0
